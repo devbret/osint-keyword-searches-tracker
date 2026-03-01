@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       return data.sort((a, b) =>
-        String(a[0]).trim().localeCompare(String(b[0]).trim())
+        String(a[0]).trim().localeCompare(String(b[0]).trim()),
       );
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -37,15 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const updateKeywordsCount = (count) => {
-    document.querySelector(
-      ".totalNumberOfKeywords"
-    ).innerText = `${count} keywords displayed`;
+    document.querySelector(".totalNumberOfKeywords").innerText =
+      `${count} keywords displayed`;
   };
 
   const updateClicksCount = (count) => {
-    document.querySelector(
-      ".totalNumberOfClicks"
-    ).innerText = `${count} total clicks this session`;
+    document.querySelector(".totalNumberOfClicks").innerText =
+      `${count} total clicks this session`;
   };
 
   const createKeywordList = (keywords) => {
@@ -133,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateKeywordsData = async () => {
     const remainingKeywords = Array.from(
-      document.querySelectorAll(".keyword")
+      document.querySelectorAll(".keyword"),
     ).map((elem) => elem.innerText);
     try {
       const response = await fetch(API_URL_UPDATE, {
@@ -161,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await response.json();
 
       const keywordElem = Array.from(
-        document.querySelectorAll(".keyword")
+        document.querySelectorAll(".keyword"),
       ).find((elem) => elem.innerText === keyword);
       if (keywordElem) {
         const clickCountElem = keywordElem.nextElementSibling;
@@ -345,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       searchButton.onclick = () => {
         const selectedKeywords = Array.from(keywordSelect.selectedOptions).map(
-          (option) => option.value
+          (option) => option.value,
         );
         if (!selectedKeywords.length) return;
 
@@ -388,8 +386,8 @@ document.addEventListener("DOMContentLoaded", () => {
           timeframe === "m"
             ? "EgQIBBAB"
             : timeframe === "d"
-            ? "EgIIAg%253D%253D"
-            : "EgQIAxAB";
+              ? "EgIIAg%253D%253D"
+              : "EgQIAxAB";
         url = `https://www.youtube.com/results?search_query=${keywords}&sp=${youtubeTimeframe}`;
         break;
       case "reddit":
@@ -441,7 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .map((kw) => kw.trim())
           .filter(Boolean);
         const updatedKeywords = Array.from(
-          new Set([...keywords.map((k) => k[0]), ...newKeywords])
+          new Set([...keywords.map((k) => k[0]), ...newKeywords]),
         );
 
         try {
@@ -511,7 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const [minDate, maxDate] = d3.extent(
             parsedData,
-            (d) => new Date(d["date and time"].split(" ")[0])
+            (d) => new Date(d["date and time"].split(" ")[0]),
           );
 
           const fullDateRange = generateDateRange(minDate, maxDate);
@@ -520,19 +518,19 @@ document.addEventListener("DOMContentLoaded", () => {
           const actionsByDate = d3.rollups(
             parsedData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedActionsByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = actionsByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedActionsByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const dates = normalizedActionsByDate.map((d) => new Date(d[0]));
@@ -540,77 +538,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const logFileRetrievedData = parsedData.filter(
             (d) =>
-              d["specific action taken"] === "Log file retrieved successfully"
+              d["specific action taken"] === "Log file retrieved successfully",
           );
 
           const logFileRetrievedByDate = d3.rollups(
             logFileRetrievedData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedLogFileRetrievedByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = logFileRetrievedByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedLogFileRetrievedByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const logFileCounts = normalizedLogFileRetrievedByDate.map(
-            (d) => d[1]
+            (d) => d[1],
           );
 
           const retrievedQueriesData = parsedData.filter(
-            (d) => d["specific action taken"] === "Retrieved queries"
+            (d) => d["specific action taken"] === "Retrieved queries",
           );
 
           const retrievedQueriesByDate = d3.rollups(
             retrievedQueriesData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedRetrievedQueriesByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = retrievedQueriesByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedRetrievedQueriesByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const retrievedCounts = normalizedRetrievedQueriesByDate.map(
-            (d) => d[1]
+            (d) => d[1],
           );
 
           const incrementedClickData = parsedData.filter((d) =>
-            d["specific action taken"].startsWith("Incremented click count for")
+            d["specific action taken"].startsWith(
+              "Incremented click count for",
+            ),
           );
 
           const incrementedClickByDate = d3.rollups(
             incrementedClickData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedIncrementedClickByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = incrementedClickByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedIncrementedClickByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const statsContainer = document.createElement("div");
@@ -712,7 +712,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("fill", "green");
 
           const incrementedCounts = normalizedIncrementedClickByDate.map(
-            (d) => d[1]
+            (d) => d[1],
           );
 
           yScale
@@ -721,7 +721,7 @@ document.addEventListener("DOMContentLoaded", () => {
               Math.max(
                 d3.max(counts),
                 d3.max(retrievedCounts),
-                d3.max(incrementedCounts)
+                d3.max(incrementedCounts),
               ),
             ])
             .nice();
@@ -757,7 +757,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 d3.max(counts),
                 d3.max(retrievedCounts),
                 d3.max(incrementedCounts),
-                d3.max(logFileCounts)
+                d3.max(logFileCounts),
               ),
             ])
             .nice();
@@ -789,25 +789,25 @@ document.addEventListener("DOMContentLoaded", () => {
           const keywordAddedData = parsedData.filter(
             (d) =>
               d["type of action"] === "update_queries" &&
-              d["specific action taken"] !== "[]"
+              d["specific action taken"] !== "[]",
           );
 
           const keywordAddedByDate = d3.rollups(
             keywordAddedData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedKeywordAddedByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = keywordAddedByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedKeywordAddedByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const keywordCounts = normalizedKeywordAddedByDate.map((d) => d[1]);
@@ -820,7 +820,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 d3.max(retrievedCounts),
                 d3.max(incrementedCounts),
                 d3.max(logFileCounts),
-                d3.max(keywordCounts)
+                d3.max(keywordCounts),
               ),
             ])
             .nice();
@@ -850,29 +850,29 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("fill", "purple");
 
           const keywordDeletedData = parsedData.filter(
-            (d) => d["type of action"] === "delete_query"
+            (d) => d["type of action"] === "delete_query",
           );
 
           const keywordsDeletedByDate = d3.rollups(
             keywordDeletedData,
             (v) => v.length,
-            (d) => d["date and time"].split(" ")[0]
+            (d) => d["date and time"].split(" ")[0],
           );
 
           const normalizedKeywordsDeletedByDate = fullDateRange.map((date) => {
             const dateString = date.toISOString().split("T")[0];
             const existingEntry = keywordsDeletedByDate.find(
-              (d) => d[0] === dateString
+              (d) => d[0] === dateString,
             );
             return existingEntry ? existingEntry : [dateString, 0];
           });
 
           normalizedKeywordsDeletedByDate.sort(
-            (a, b) => new Date(a[0]) - new Date(b[0])
+            (a, b) => new Date(a[0]) - new Date(b[0]),
           );
 
           const keywordDeletionCounts = normalizedKeywordsDeletedByDate.map(
-            (d) => d[1]
+            (d) => d[1],
           );
 
           yScale
@@ -884,7 +884,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 d3.max(incrementedCounts),
                 d3.max(logFileCounts),
                 d3.max(keywordCounts),
-                d3.max(keywordDeletionCounts)
+                d3.max(keywordDeletionCounts),
               ),
             ])
             .nice();
@@ -965,7 +965,7 @@ document.addEventListener("DOMContentLoaded", () => {
               .filter(
                 (d) =>
                   d["specific action taken"] &&
-                  d["specific action taken"].includes("on platform:")
+                  d["specific action taken"].includes("on platform:"),
               )
               .map((d) => {
                 const match =
@@ -974,7 +974,7 @@ document.addEventListener("DOMContentLoaded", () => {
               })
               .filter(Boolean),
             (v) => v.length,
-            (d) => d
+            (d) => d,
           );
 
           platformCounts.sort((a, b) => b[1] - a[1]);
@@ -1028,7 +1028,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("width", barXScale.bandwidth())
             .attr(
               "height",
-              (d) => barHeight - barMargin.bottom - barYScale(d[1])
+              (d) => barHeight - barMargin.bottom - barYScale(d[1]),
             )
             .attr("fill", "steelblue");
 
@@ -1053,19 +1053,19 @@ document.addEventListener("DOMContentLoaded", () => {
             parsedData
               .filter((dataRow) =>
                 dataRow["specific action taken"].includes(
-                  "Incremented click count for:"
-                )
+                  "Incremented click count for:",
+                ),
               )
               .map((dataRow) => {
                 const match = dataRow["specific action taken"].match(
-                  /Incremented click count for: (.*?) on platform: (.*?)$/
+                  /Incremented click count for: (.*?) on platform: (.*?)$/,
                 );
                 return match ? { keyword: match[1], platform: match[2] } : null;
               })
               .filter(Boolean),
             (group) => group.length,
             (data) => data.keyword,
-            (data) => data.platform
+            (data) => data.platform,
           );
 
           let topSearchesStackableData = topSearchesPlatformCounts.map(
@@ -1075,7 +1075,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 row[platform] = count;
               });
               return row;
-            }
+            },
           );
 
           topSearchesStackableData = topSearchesStackableData
@@ -1093,9 +1093,9 @@ document.addEventListener("DOMContentLoaded", () => {
           const topSearchesPlatforms = Array.from(
             new Set(
               topSearchesStackableData.flatMap((row) =>
-                Object.keys(row).filter((key) => key !== "keyword")
-              )
-            )
+                Object.keys(row).filter((key) => key !== "keyword"),
+              ),
+            ),
           );
 
           const topSearchesChartWidth = 600;
@@ -1123,8 +1123,8 @@ document.addEventListener("DOMContentLoaded", () => {
               d3.max(topSearchesStackableData, (d) =>
                 topSearchesPlatforms.reduce(
                   (sum, platform) => sum + (d[platform] || 0),
-                  0
-                )
+                  0,
+                ),
               ),
             ])
             .nice()
@@ -1146,7 +1146,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const topSearchesStack = d3.stack().keys(topSearchesPlatforms);
           const topSearchesStackedData = topSearchesStack(
-            topSearchesStackableData
+            topSearchesStackableData,
           );
 
           topSearchesSvg
@@ -1155,7 +1155,7 @@ document.addEventListener("DOMContentLoaded", () => {
               "transform",
               `translate(0,${
                 topSearchesChartHeight - topSearchesMargin.bottom
-              })`
+              })`,
             )
             .call(d3.axisBottom(topSearchesXScale).tickSizeOuter(0))
             .selectAll("text")
@@ -1181,7 +1181,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("y", (d) => topSearchesYScale(d[1]))
             .attr(
               "height",
-              (d) => topSearchesYScale(d[0]) - topSearchesYScale(d[1])
+              (d) => topSearchesYScale(d[0]) - topSearchesYScale(d[1]),
             )
             .attr("width", topSearchesXScale.bandwidth());
 
@@ -1195,7 +1195,7 @@ document.addEventListener("DOMContentLoaded", () => {
               (d, i) =>
                 `translate(${
                   topSearchesChartWidth - topSearchesMargin.right - 100
-                }, ${topSearchesMargin.top + i * 20})`
+                }, ${topSearchesMargin.top + i * 20})`,
             );
 
           topSearchesLegend
@@ -1218,11 +1218,11 @@ document.addEventListener("DOMContentLoaded", () => {
             (d) => {
               const dateTime = new Date(d["date and time"]);
               return `${dateTime.getDay()}-${dateTime.getHours()}`;
-            }
+            },
           );
 
           const heatmapData = Array.from({ length: 7 }, () =>
-            Array(24).fill(0)
+            Array(24).fill(0),
           );
 
           hourlyActivity.forEach(([key, count]) => {
@@ -1271,8 +1271,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .selectAll("rect")
             .data(
               heatmapData.flatMap((row, day) =>
-                row.map((count, hour) => ({ day, hour, count }))
-              )
+                row.map((count, hour) => ({ day, hour, count })),
+              ),
             )
             .enter()
             .append("rect")
@@ -1286,7 +1286,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .append("g")
             .attr(
               "transform",
-              `translate(0,${heatmapHeight - heatmapMargin.bottom})`
+              `translate(0,${heatmapHeight - heatmapMargin.bottom})`,
             )
             .call(d3.axisBottom(heatmapX).tickFormat((d) => `${d}:00`));
 
@@ -1297,8 +1297,8 @@ document.addEventListener("DOMContentLoaded", () => {
               d3
                 .axisLeft(heatmapY)
                 .tickFormat(
-                  (d) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d]
-                )
+                  (d) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d],
+                ),
             );
         })
         .catch((error) => {
