@@ -38,13 +38,15 @@ Below are the prerequisite programs and setup steps for operating this software 
 
 8. Run the primary script: `python3 app.py`
 
-9. To view the frontend GUI, visit the following URL in your browser: `http://127.0.0.1:5501`
+9. Launch an HTTP server in a new terminal: `python3 -m http.server`
 
-10. Once the main interface has been opened, organize your OSINT keywords searches by clicking on the `Add` button
+10. To view the frontend GUI, press your `CTRL` key and click the URL link displayed in the terminal
 
-11. Click on any of the links to visit the relevant platform for a specific timeframe and keyword
+11. Once the main interface has been opened, organize your OSINT keywords searches by clicking on the `Add` button
 
-12. Exit the virtual environment when finished: `deactivate`
+12. Click on any of the links to visit the relevant platform for a specific timeframe and keyword
+
+13. Exit the virtual environment when finished: `deactivate`
 
 ## Analytics
 
