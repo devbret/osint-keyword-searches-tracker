@@ -56,7 +56,7 @@ This application also includes usage analytics which can be accessed through the
 
 - `Number Of Actions Daily` - Overall day-by-day interaction volume
 
-- `Activity By Platform`: How often users are launching searches on platforms such as Google, YouTube, Reddit and Bluesky
+- `Activity By Platform` - How often users are launching searches on platforms such as Google, YouTube, Reddit and Bluesky
 
 - `Top Searches` - Surfaces the most frequently used keywords and shows how their activity is distributed across platforms
 
