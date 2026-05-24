@@ -464,9 +464,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(bg);
 
       const popup = document.createElement("div");
-      popup.classList.add("popup");
+      popup.classList.add("popup", "stats-popup");
       document.body.appendChild(popup);
-      popup.style.left = `${window.innerWidth / 2 - 323}px`;
+      popup.style.left = `${window.innerWidth / 2 - 400}px`;
 
       const closePopup = document.createElement("p");
       closePopup.classList.add("close-popup");
@@ -514,7 +514,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const fullDateRange = generateDateRange(minDate, maxDate);
 
-          // Line Graph - Activities By Date
           const actionsByDate = d3.rollups(
             parsedData,
             (v) => v.length,
@@ -621,7 +620,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
           actionsByDate.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
-          const width = 600;
+          const availableWidth = popup.clientWidth - 46;
+          const width = availableWidth;
           const height = 300;
           const margin = { top: 20, right: 30, bottom: 30, left: 40 };
 
@@ -952,7 +952,6 @@ document.addEventListener("DOMContentLoaded", () => {
             legendContainer.appendChild(legendItem);
           });
 
-          // Bar Graph - Platform Activity
           const statsContainerPlatformActivity = document.createElement("div");
           statsContainerPlatformActivity.id = "statsContainerPlatformActivity";
           popupContainer.appendChild(statsContainerPlatformActivity);
@@ -979,7 +978,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           platformCounts.sort((a, b) => b[1] - a[1]);
 
-          const barWidth = 600;
+          const barWidth = availableWidth;
           const barHeight = 300;
           const barMargin = { top: 20, right: 30, bottom: 50, left: 50 };
 
@@ -1042,7 +1041,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("text-anchor", "middle")
             .text((d) => d[1]);
 
-          // Bar Graph - Top Searches
           const topSearchesContainer = document.createElement("div");
           topSearchesContainer.id = "topSearchesContainer";
           popupContainer.appendChild(topSearchesContainer);
@@ -1098,7 +1096,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ),
           );
 
-          const topSearchesChartWidth = 600;
+          const topSearchesChartWidth = availableWidth;
           const topSearchesChartHeight = 400;
           const topSearchesMargin = {
             top: 20,
@@ -1211,7 +1209,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .style("text-anchor", "start")
             .text((d) => d);
 
-          // Heatmap Graph - Hourly Activity
           const hourlyActivity = d3.rollups(
             parsedData,
             (v) => v.length,
@@ -1236,7 +1233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           statsContainerHourlyActivity.innerHTML += "<h2>Hourly Activity</h2>";
 
-          const heatmapWidth = 600;
+          const heatmapWidth = availableWidth;
           const heatmapHeight = 300;
           const heatmapMargin = {
             top: 10,
@@ -1300,6 +1297,149 @@ document.addEventListener("DOMContentLoaded", () => {
                   (d) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d],
                 ),
             );
+
+          const calendarContainer = document.createElement("div");
+          calendarContainer.id = "calendarHeatmapContainer";
+          popupContainer.appendChild(calendarContainer);
+
+          calendarContainer.innerHTML += "<h2>Daily Activity</h2>";
+
+          const dateCountMap = new Map(
+            normalizedActionsByDate.map(([date, count]) => [date, count]),
+          );
+
+          const calColor = d3
+            .scaleSequential(d3.interpolateGreens)
+            .domain([
+              0,
+              d3.max(normalizedActionsByDate, ([, count]) => count) || 1,
+            ]);
+
+          const calMargin = { top: 30, right: 30, bottom: 20, left: 40 };
+          const minCellH = Math.ceil(
+            (260 - calMargin.top - calMargin.bottom) / 7,
+          );
+
+          const calMonthNames = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ];
+          const calDayLabels = [
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+          ];
+
+          const dataStartYear = minDate.getFullYear();
+          const dataEndYear = maxDate.getFullYear();
+
+          for (let year = dataStartYear; year <= dataEndYear; year++) {
+            const yearStart = new Date(year, 0, 1);
+            yearStart.setDate(yearStart.getDate() - yearStart.getDay());
+
+            const yearEnd = new Date(year, 11, 31);
+            yearEnd.setDate(yearEnd.getDate() + (6 - yearEnd.getDay()));
+
+            const yearDays = [];
+            const yCur = new Date(yearStart);
+            while (yCur <= yearEnd) {
+              const ds = yCur.toISOString().split("T")[0];
+              const dayIndex = Math.round((yCur - yearStart) / 86400000);
+              yearDays.push({
+                ds,
+                count: dateCountMap.get(ds) || 0,
+                week: Math.floor(dayIndex / 7),
+                dow: yCur.getDay(),
+                month: yCur.getMonth(),
+                dayOfMonth: yCur.getDate(),
+              });
+              yCur.setDate(yCur.getDate() + 1);
+            }
+
+            const numWeeks = yearDays[yearDays.length - 1].week + 1;
+            const cellW = Math.max(
+              Math.floor(
+                (availableWidth - calMargin.left - calMargin.right) / numWeeks,
+              ),
+              Math.ceil(675 / numWeeks),
+            );
+            const cellH = Math.max(cellW, minCellH);
+            const svgHeight = cellH * 7 + calMargin.top + calMargin.bottom;
+
+            const yearDiv = document.createElement("div");
+            calendarContainer.appendChild(yearDiv);
+
+            const yearSvg = d3
+              .select(yearDiv)
+              .append("svg")
+              .attr("width", availableWidth)
+              .attr("height", svgHeight);
+
+            yearSvg
+              .append("text")
+              .attr("x", 0)
+              .attr("y", 14)
+              .style("font-size", "13px")
+              .style("font-weight", "bold")
+              .text(year);
+
+            yearDays
+              .filter((d) => d.dayOfMonth === 1)
+              .forEach((d) => {
+                yearSvg
+                  .append("text")
+                  .attr("x", calMargin.left + d.week * cellW)
+                  .attr("y", calMargin.top - 6)
+                  .style("font-size", "10px")
+                  .text(calMonthNames[d.month]);
+              });
+
+            calDayLabels.forEach((label, i) => {
+              if (i % 2 === 1) {
+                yearSvg
+                  .append("text")
+                  .attr("x", calMargin.left - 4)
+                  .attr("y", calMargin.top + i * cellH + cellH / 2)
+                  .attr("text-anchor", "end")
+                  .attr("dominant-baseline", "middle")
+                  .style("font-size", "10px")
+                  .text(label);
+              }
+            });
+
+            yearSvg
+              .selectAll(".cal-cell-" + year)
+              .data(yearDays)
+              .enter()
+              .append("rect")
+              .attr("class", "cal-cell")
+              .attr("x", (d) => calMargin.left + d.week * cellW)
+              .attr("y", (d) => calMargin.top + d.dow * cellH)
+              .attr("width", Math.max(1, cellW - 2))
+              .attr("height", Math.max(1, cellH - 2))
+              .attr("rx", 2)
+              .attr("fill", (d) =>
+                d.count === 0 ? "#ebedf0" : calColor(d.count),
+              )
+              .append("title")
+              .text(
+                (d) => `${d.ds}: ${d.count} action${d.count !== 1 ? "s" : ""}`,
+              );
+          }
         })
         .catch((error) => {
           console.error("Error fetching log data:", error);
