@@ -277,3 +277,12 @@ input[type="checkbox"] {
 #statsContainerHourlyActivity h2 {
   margin-top: 0px;
 }
+
+.stats-popup {
+  width: 800px;
+  max-width: calc(100vw - 80px);
+  top: 40px;
+  bottom: 40px;
+  max-height: none;
+  height: calc(100vh - 80px);
+}
