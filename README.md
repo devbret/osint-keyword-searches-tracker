@@ -1,16 +1,16 @@
 # OSINT Keyword Searches Tracker
 
-![A screenshot from the main application UI, with search terms blocked from view.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/e72bbd40-7c45-4172-b046-d0bec18646d7.jpg)
+![A screenshot from the main application UI, with search terms blocked from view.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/df5e6e15-1efb-4b33-8d94-c0ab70d67b54.jpg)
 
-Centralizes keyword management, enables one-click platform searches, tracks user activity and visualizes search behavior through analytics dashboards.
+Centralize keyword management, enable one-click platform searches, track user activity and visualize search behavior through the analytics dashboards.
 
-## Overview
+## Application Overview
 
 This application stores a list of search keywords in a JSON file, lets the user add or delete keywords and displays each keyword with quick links to search for it across platforms like Google, YouTube, Reddit and Bluesky. Every time a keyword list is loaded, updated, deleted or clicked, the Flask server logs the activity to a CSV file and updates click counts for the selected keyword.
 
 On the frontend, the app provides a (1) live search bar for filtering keywords, (2) custom multi-keyword search popup for building combined searches and (3) stats modal which visualizes usage patterns with D3 charts, including daily activity trends, platform activity, top searches and an hourly activity heatmap.
 
-## Set Up
+## Basic Setup Instructions
 
 Below are the prerequisite programs and setup steps for operating this software on a Linux machine.
 
@@ -26,7 +26,7 @@ Below are the prerequisite programs and setup steps for operating this software 
 
 2. Open a terminal
 
-3. Clone this repository using `git` by running the following command: `git clone git@github.com:devbret/osint-keyword-searches-tracker.git`
+3. Clone this repository: `git clone git@github.com:devbret/osint-keyword-searches-tracker.git`
 
 4. Navigate to the repo's directory: `cd osint-keyword-searches-tracker`
 
@@ -34,25 +34,23 @@ Below are the prerequisite programs and setup steps for operating this software 
 
 6. Activate your virtual environment: `source venv/bin/activate`
 
-7. Install the needed dependencies for running the script: `pip install -r requirements.txt`
+7. Install the needed dependencies: `pip install -r requirements.txt`
 
 8. Run the primary script: `python3 app.py`
 
-9. Launch an HTTP server in a new terminal: `python3 -m http.server`
+9. Open a second terminal and navigate to the repo's directory: `cd osint-keyword-searches-tracker`
 
-10. To view the frontend GUI, press your `CTRL` key and click the URL link displayed in the terminal
+10. Launch an HTTP server in the second terminal: `python3 -m http.server`
 
-11. Once the main interface has been opened, organize your OSINT keywords searches by clicking on the `Add` button
+11. Access the frontend in a browser: `http://localhost:8000`
 
-12. Click on any of the links to visit the relevant platform for a specific timeframe and keyword
+12. When finished, close the HTTP server: `CTRL + C`
 
-13. Exit the virtual environment when finished: `deactivate`
+13. Exit the virtual environment: `deactivate`
 
-## Analytics
+## Analytics Dashboard
 
-![Screenshot of the first two data visualizations.](https://hosting.photobucket.com/bbcfb0d4-be20-44a0-94dc-65bff8947cf2/e9d5ba13-8b09-4d48-b606-17b6e6bf518c.jpg)
-
-This application also includes usage analytics which can be accessed through the `Stats` button in the upper-right corner of the interface. The analytics view reads from the application’s activity log and presents several data visualizations, including:
+This application includes usage analytics which can be accessed through the `Stats` button located at the upper-right corner of the primary interface. The analytics dashboard reads from the application’s activity log and presents several data visualizations, including:
 
 - `Number Of Actions Daily` - Overall day-by-day interaction volume
 
@@ -68,12 +66,12 @@ Together, these charts make it easy to understand engagement trends, identify th
 
 This project repo is intended to demonstrate an ability to do the following:
 
-- Centralize management of searchable keywords with persistent storage and real-time updates
+- Provide a centralized dashboard to manage, track and organize search keywords across multiple platforms
 
-- Log all user interactions, including searches, additions, deletions and click activity
+- Use D3.js visualizations to transform activity logs into insights through heatmaps, bar charts and calendars
 
-- Provide cross-platform search launching with one-click access and tracking
+- Allow users to create custom combined search queries and monitor engagement metrics in a single interface
 
-- Visualize user behavior and engagement trends via an analytics dashboards
+- Track keyword performance and visualize user behavior patterns over time across various digital platforms
 
 If you have any questions or would like to collaborate, please reach out either on GitHub or via [my website](https://bretbernhoft.com/).

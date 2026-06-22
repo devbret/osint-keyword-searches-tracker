@@ -56,19 +56,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         <p><span class="keyword">${keywordText}</span>
                         <span class="click-count">${clickCount} clicks</span>
                         <span class="bucket">
-                            <a href="https://www.google.com/search?q=${formattedKeyword}" target="_blank" class="platform">Google</a> 
+                            <a href="https://www.google.com/search?q=${formattedKeyword}" target="_blank" class="platform">Google</a>
+                            <span class="search"><a href="https://www.google.com/search?q=${formattedKeyword}&tbs=qdr:h" target="_blank">H</a></span>
                             <span class="search"><a href="https://www.google.com/search?q=${formattedKeyword}&tbs=qdr:d" target="_blank">D</a></span>
                             <span class="search"><a href="https://www.google.com/search?q=${formattedKeyword}&tbs=qdr:w" target="_blank">W</a></span>
                             <span class="search"><a href="https://www.google.com/search?q=${formattedKeyword}&tbs=qdr:m" target="_blank">M</a></span>
                         </span> 
                         <span class="bucket">
-                            <a href="https://www.youtube.com/results?search_query=${formattedKeyword}" target="_blank" class="platform">YouTube</a> 
+                            <a href="https://www.youtube.com/results?search_query=${formattedKeyword}" target="_blank" class="platform">YouTube</a>
+                            <span class="search"><a href="https://www.youtube.com/results?search_query=${formattedKeyword}&sp=EgIIAQ%253D%253D" target="_blank">H</a></span>
                             <span class="search"><a href="https://www.youtube.com/results?search_query=${formattedKeyword}&sp=EgIIAg%253D%253D" target="_blank">D</a></span>
                             <span class="search"><a href="https://www.youtube.com/results?search_query=${formattedKeyword}&sp=EgQIAxAB" target="_blank">W</a></span>
                             <span class="search"><a href="https://www.youtube.com/results?search_query=${formattedKeyword}&sp=EgQIBBAB" target="_blank">M</a></span>
                         </span> 
                         <span class="bucket">
-                            <a href="https://old.reddit.com/search/?q=${formattedKeyword}" target="_blank" class="platform">Reddit</a> 
+                            <a href="https://old.reddit.com/search/?q=${formattedKeyword}" target="_blank" class="platform">Reddit</a>
+                            <span class="search"><a href="https://old.reddit.com/search/?q=${formattedKeyword}&t=hour" target="_blank">H</a></span>
                             <span class="search"><a href="https://old.reddit.com/search/?q=${formattedKeyword}&t=day" target="_blank">D</a></span>
                             <span class="search"><a href="https://old.reddit.com/search/?q=${formattedKeyword}&t=week" target="_blank">W</a></span>
                             <span class="search"><a href="https://old.reddit.com/search/?q=${formattedKeyword}&t=month" target="_blank">M</a></span>
@@ -220,8 +223,13 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(bg);
 
       const popup = document.createElement("div");
-      popup.classList.add("popup");
+      popup.classList.add("popup", "fancy-popup", "custom-search-popup");
       document.body.appendChild(popup);
+
+      const title = document.createElement("h2");
+      title.classList.add("fancy-popup-title");
+      title.innerText = "🔍 Custom Search";
+      popup.appendChild(title);
 
       const closePopup = document.createElement("p");
       closePopup.classList.add("close-popup");
@@ -264,6 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timeframeSelect.classList.add("timeframe-select");
       parameterDIV.appendChild(timeframeSelect);
       const timeframes = [
+        { text: "Hour", value: "h" },
         { text: "Day", value: "d" },
         { text: "Week", value: "w" },
         { text: "Month", value: "m" },
@@ -296,10 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const searchTypeDiv = document.createElement("div");
-      searchTypeDiv.style.display = "flex";
-      searchTypeDiv.style.justifyContent = "center";
-      searchTypeDiv.style.width = "100%";
-      searchTypeDiv.style.margin = "20px 0";
+      searchTypeDiv.classList.add("search-type-DIV");
       popup.appendChild(searchTypeDiv);
 
       const orCheckbox = document.createElement("input");
@@ -382,16 +388,21 @@ document.addEventListener("DOMContentLoaded", () => {
         url = `https://www.google.com/search?q=${keywords}&tbs=qdr:${timeframe}`;
         break;
       case "youtube":
-        const youtubeTimeframe =
-          timeframe === "m"
-            ? "EgQIBBAB"
-            : timeframe === "d"
-              ? "EgIIAg%253D%253D"
-              : "EgQIAxAB";
-        url = `https://www.youtube.com/results?search_query=${keywords}&sp=${youtubeTimeframe}`;
+        const youtubeTimeframes = {
+          h: "EgIIAQ%253D%253D",
+          d: "EgIIAg%253D%253D",
+          w: "EgQIAxAB",
+          m: "EgQIBBAB",
+        };
+        url = `https://www.youtube.com/results?search_query=${keywords}&sp=${
+          youtubeTimeframes[timeframe] || "EgQIAxAB"
+        }`;
         break;
       case "reddit":
-        url = `https://old.reddit.com/search/?q=${keywords}&t=${timeframe}`;
+        const redditTimeframes = { h: "hour", d: "day", w: "week", m: "month" };
+        url = `https://old.reddit.com/search/?q=${keywords}&t=${
+          redditTimeframes[timeframe] || "all"
+        }`;
         break;
       case "bluesky":
         url = `https://bsky.app/search?q=${keywords}`;
@@ -406,9 +417,14 @@ document.addEventListener("DOMContentLoaded", () => {
       bg.classList.add("bg");
       document.body.appendChild(bg);
       const popup = document.createElement("div");
-      popup.classList.add("popup");
+      popup.classList.add("popup", "fancy-popup");
       document.body.appendChild(popup);
-      popup.style.left = `${window.innerWidth / 2 - 150}px`;
+
+      const title = document.createElement("h2");
+      title.classList.add("fancy-popup-title");
+      title.innerText = "➕ Add Keywords";
+      popup.appendChild(title);
+
       const closePopup = document.createElement("p");
       closePopup.classList.add("close-popup");
       closePopup.innerText = "X";
@@ -420,6 +436,13 @@ document.addEventListener("DOMContentLoaded", () => {
       bg.onclick = () => {
         document.body.removeChild(bg);
         document.body.removeChild(popup);
+      };
+
+      const centerPopup = () => {
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+        popup.style.left = `calc(50% - ${popupWidth / 2}px)`;
+        popup.style.top = `calc(50% - ${popupHeight / 2}px)`;
       };
 
       const newKeywordInput = document.createElement("input");
@@ -456,6 +479,8 @@ document.addEventListener("DOMContentLoaded", () => {
           console.error("Error updating keywords:", error);
         }
       };
+
+      setTimeout(centerPopup, 0);
     });
 
     createButton("Stats", "stats-button", () => {
@@ -464,9 +489,14 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(bg);
 
       const popup = document.createElement("div");
-      popup.classList.add("popup", "stats-popup");
+      popup.classList.add("popup", "fancy-popup", "stats-popup");
       document.body.appendChild(popup);
       popup.style.left = `${window.innerWidth / 2 - 400}px`;
+
+      const title = document.createElement("h2");
+      title.classList.add("fancy-popup-title");
+      title.innerText = "📊 Stats";
+      popup.appendChild(title);
 
       const closePopup = document.createElement("p");
       closePopup.classList.add("close-popup");
