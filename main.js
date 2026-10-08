@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL_GET = "http://127.0.0.1:5501/get_queries";
-  const API_URL_UPDATE = "http://127.0.0.1:5501/update_queries";
-  const API_URL_INCREMENT_CLICK = "http://127.0.0.1:5501/increment_click";
-  const API_URL_DELETE_QUERY = "http://127.0.0.1:5501/delete_query";
+  const API_URL_GET = "/get_queries";
+  const API_URL_UPDATE = "/update_queries";
+  const API_URL_INCREMENT_CLICK = "/increment_click";
+  const API_URL_DELETE_QUERY = "/delete_query";
+  const API_URL_GET_LOGS = "/get_logs";
   const fetchHeaders = {
     "Content-Type": "application/json",
   };
@@ -517,7 +518,7 @@ document.addEventListener("DOMContentLoaded", () => {
       popupContainer.id = "popupContainer";
       popup.appendChild(popupContainer);
 
-      fetch("http://localhost:5501/get_logs")
+      fetch(API_URL_GET_LOGS)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);

@@ -1,12 +1,13 @@
 import logging
 import os
 import json
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request, jsonify, send_from_directory, abort
 import csv
 
 app = Flask(__name__)
-CORS(app)
+app.config['TRUSTED_HOSTS'] = ['localhost', '127.0.0.1']
+
+frontend_files = {'index.html', 'main.js', 'main.css'}
 
 json_file_path = 'search_queries.json'
 log_file_path = 'activity_log.csv'
@@ -45,6 +46,13 @@ logger.addHandler(handler)
 
 def log_action(action_type, action_details):
     logger.info('', extra={'action_type': action_type, 'action_details': action_details})
+
+@app.route('/', defaults={'filename': 'index.html'})
+@app.route('/<filename>')
+def frontend(filename):
+    if filename not in frontend_files:
+        abort(404)
+    return send_from_directory(app.root_path, filename)
 
 @app.route('/get_queries', methods=['GET'])
 def get_queries():

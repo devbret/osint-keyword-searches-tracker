@@ -38,15 +38,11 @@ Below are the prerequisite programs and setup steps for operating this software 
 
 8. Run the primary script: `python3 app.py`
 
-9. Open a second terminal and navigate to the repo's directory: `cd osint-keyword-searches-tracker`
+9. Access the frontend in a browser: `http://localhost:5501`
 
-10. Launch an HTTP server in the second terminal: `python3 -m http.server`
+10. When finished, stop the server: `CTRL + C`
 
-11. Access the frontend in a browser: `http://localhost:8000`
-
-12. When finished, close the HTTP server: `CTRL + C`
-
-13. Exit the virtual environment: `deactivate`
+11. Exit the virtual environment: `deactivate`
 
 ## Analytics Dashboard
 
